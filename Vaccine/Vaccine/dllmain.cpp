@@ -12,16 +12,18 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     {
     case DLL_PROCESS_ATTACH:
         std::cout << "[*] Process attached the vaccine\n";
+        break;
 
     case DLL_THREAD_ATTACH:
         std::cout << "[*] Thread attached the vaccine\n";
+        break;
 
     case DLL_THREAD_DETACH:
         std::cout << "[*] Thread detached the vaccine\n";
+        break;
 
     case DLL_PROCESS_DETACH:
         std::cout << "[*] Process detached the vaccine\n";
-
         break;
     }
     return TRUE;
