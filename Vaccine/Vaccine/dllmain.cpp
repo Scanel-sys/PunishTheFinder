@@ -3,6 +3,7 @@
 #include "Vaccine.h"
 
 
+
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
                        LPVOID lpReserved
@@ -11,9 +12,11 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     switch (ul_reason_for_call)
     {
     case DLL_PROCESS_ATTACH:
+    {
         std::cout << "[*] Process attached the vaccine\n";
+        CloseHandle(CreateThread(nullptr, 0, (LPTHREAD_START_ROUTINE)HackThread, hModule, 0, nullptr));
         break;
-
+    }
     case DLL_THREAD_ATTACH:
         std::cout << "[*] Thread attached the vaccine\n";
         break;
@@ -25,6 +28,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     case DLL_PROCESS_DETACH:
         std::cout << "[*] Process detached the vaccine\n";
         break;
+    
     }
     return TRUE;
 }
