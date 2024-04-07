@@ -1,13 +1,19 @@
 #include "Injector.h"
 
-
-int main(int argc, int * argv[])
+std::wstring s2ws(const std::string& str)
 {
-	fs::path dll_path;
-	std::wstring proc_name = L"cmd.exe";
-	dll_path.append("C:\\Users\\scanel\\Desktop\\src\\study\\3_course\\2_sem\\TRSPO\\2\\Injector\\Injector\\Vaccine.dll");
+	int size_needed = MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), NULL, 0);
+	std::wstring wstrTo(size_needed, 0);
+	MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), &wstrTo[0], size_needed);
+	return wstrTo;
+}
+
+
+int main(int argc, char * argv[])
+{
+	std::wstring proc_name = s2ws(argv[1]);
+	fs::path dll_path = argv[2];
 
 	Injector injector;
 	injector.makeInject(proc_name, dll_path);
-	system("PAUSE");
 }
