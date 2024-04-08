@@ -13,22 +13,26 @@
 namespace fs = std::filesystem;
 
 
+void DisplayError(LPTSTR lpszFunction);
+
+
 int main(int argc, char * argv[])
 {
 	fs::path file_name = argv[1];
-	
+	fs::path file_name_to_find = argv[2];
+
 	PVOID OldValue = NULL;
 	WIN32_FIND_DATA FindFileData;
 	HANDLE hFind;
 	LARGE_INTEGER filesize;
-	//Wow64DisableWow64FsRedirection(&OldValue);
-	
-	std::cout << "\n";
-	while (1)
-	{
-		std::cout << "| log | Finding first file...\n";
 
-		hFind = FindFirstFile(file_name.wstring().data(), &FindFileData);
+	std::cout << "\n";
+	int i = 0;
+	while (i++ < 2)
+	{
+		std::cout << "| log | Starting finding file...\n";
+
+		hFind = FindFirstFile(file_name_to_find.wstring().data(), &FindFileData);
 		do
 		{
 			if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
@@ -43,11 +47,37 @@ int main(int argc, char * argv[])
 			}
 		
 			Sleep(2000);
-			std::cout << "| log | Finding next file...\n";
 		} while (FindNextFile(hFind, &FindFileData) != 0);
 		if(GetLastError() == NO_MORE_FILES)
 			std::cout << "| log | No more files" << '\n';
+		FindClose(hFind);
 	}
-	FindClose(hFind);
-	//Wow64RevertWow64FsRedirection(OldValue);
+
+	system("PAUSE");
+	//HANDLE hFile = CreateFile(file_name.c_str(),		// name of the write
+	//							GENERIC_WRITE,          // open for writing
+	//							0,                      // do not share
+	//							NULL,                   // default security
+	//							CREATE_NEW,             // create new file only
+	//							FILE_ATTRIBUTE_NORMAL,  // normal file
+	//							NULL);                  // no attr. template
+
+
+	HANDLE hFile = CreateFile(file_name.c_str(),								// file to open
+		GENERIC_READ,									// open for reading
+		FILE_SHARE_READ,								// share for reading
+		NULL,											// default security
+		OPEN_EXISTING,									// existing file only
+		FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED,	// normal file
+		NULL);											// no attr. template
+
+	if (hFile == INVALID_HANDLE_VALUE)
+	{
+		std::cout << "CreateFile\n";
+		std::cout << "Terminal failure: file doesnt exist " << file_name.string().c_str() << '\n';
+	}
+
+	CloseHandle(hFile);
+
+	return 0;
 }
