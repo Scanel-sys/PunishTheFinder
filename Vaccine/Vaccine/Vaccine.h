@@ -1,4 +1,6 @@
-#pragma once
+#ifndef VACCINE_H
+#define VACCINE_H
+
 #include "Hookpatch32.h"
 
 
@@ -9,12 +11,31 @@
 #endif
 
 
-//typedef BOOL(__stdcall* tFindNextFileA)(HANDLE hFindFile, LPWIN32_FIND_DATAA lpFindFileData);
 typedef decltype(&FindNextFileA) tFindNextFileA;
 typedef decltype(&FindNextFileW) tFindNextFileW;
 
+typedef decltype(&FindFirstFileA) tFindFirstFileA;
+typedef decltype(&FindFirstFileW) tFindFirstFileW;
 
-BOOL __stdcall hooktFindNextFileA(HANDLE hFindFile, LPWIN32_FIND_DATAA lpFindFileData);
-BOOL __stdcall hooktFindNextFileW(HANDLE hFindFile, LPWIN32_FIND_DATAW lpFindFileData);
+typedef decltype(&CreateFileA) tCreateFileA;
+typedef decltype(&CreateFileW) tCreateFileW;
+
+
+BOOL __stdcall HooktFindNextFileA(HANDLE hFindFile, LPWIN32_FIND_DATAA lpFindFileData);
+BOOL __stdcall HooktFindNextFileW(HANDLE hFindFile, LPWIN32_FIND_DATAW lpFindFileData);
+
+HANDLE __stdcall HookFindFirstFileA(LPCSTR lpFileName, LPWIN32_FIND_DATAA lpFindFileData);
+HANDLE __stdcall HookFindFirstFileW(LPCWSTR lpFileName, LPWIN32_FIND_DATAW lpFindFileData);
+
+HANDLE __stdcall HookCreateFileA(LPCSTR lpFileName, DWORD dwDesiredAccess, 
+									DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSecurityAttributes, 
+									DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile);
+
+HANDLE __stdcall HookCreateFileW(LPCWSTR lpFileName, DWORD dwDesiredAccess, 
+								DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSecurityAttributes, 
+								DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile);
+
 
 DWORD WINAPI HackThread(HMODULE hModule);
+
+#endif
