@@ -142,6 +142,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
+    <ClInclude Include="HookManager.h" />
     <ClInclude Include="Hookpatch.h" />
     <ClInclude Include="Hookpatch32.h" />
     <ClInclude Include="Hookpatch64.h" />
@@ -150,6 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="HookManager.cpp" />
     <ClCompile Include="Hookpatch.cpp" />
     <ClCompile Include="Hookpatch32.cpp" />
     <ClCompile Include="Hookpatch64.cpp" />

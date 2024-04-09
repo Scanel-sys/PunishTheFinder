@@ -18,8 +18,11 @@ void DisplayError(LPTSTR lpszFunction);
 
 int main(int argc, char * argv[])
 {
-	fs::path file_name = argv[1];
-	fs::path file_name_to_find = argv[2];
+	//fs::path file_name = argv[1];
+	//fs::path file_name_to_find = argv[2];
+	fs::path file_name = "C:\\Users\\scanel\\Desktop\\src\\study\\3_course\\2_sem\\TRSPO\\2\\Patient\\Debug\\123.txt";
+	fs::path file_name_to_find = "C:\\Users\\scanel\\Desktop\\src\\study\\3_course\\2_sem\\TRSPO\\2\\Patient\\Debug\\123*.txt";
+
 
 	PVOID OldValue = NULL;
 	WIN32_FIND_DATA FindFileData;
@@ -46,7 +49,7 @@ int main(int argc, char * argv[])
 				wprintf(TEXT("| log |   %s   %ld bytes\n"), FindFileData.cFileName, filesize.QuadPart);
 			}
 		
-			Sleep(2000);
+			Sleep(1000);
 		} while (FindNextFile(hFind, &FindFileData) != 0);
 		if(GetLastError() == NO_MORE_FILES)
 			std::cout << "| log | No more files" << '\n';
@@ -78,6 +81,8 @@ int main(int argc, char * argv[])
 	}
 
 	CloseHandle(hFile);
+
+	system("PAUSE");
 
 	return 0;
 }
