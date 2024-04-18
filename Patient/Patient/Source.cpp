@@ -28,7 +28,7 @@ int main(int argc, char * argv[])
 
 	std::cout << "\n";
 	int i = 0;
-	while (i++ < 2)
+	while (i++ < 4)
 	{
 		std::cout << "| log | Starting finding file...\n";
 
@@ -46,7 +46,7 @@ int main(int argc, char * argv[])
 				wprintf(TEXT("| log |   %s   %ld bytes\n"), FindFileData.cFileName, filesize.QuadPart);
 			}
 		
-			Sleep(2000);
+			Sleep(1000);
 		} while (FindNextFile(hFind, &FindFileData) != 0);
 		if(GetLastError() == NO_MORE_FILES)
 			std::cout << "| log | No more files" << '\n';
@@ -54,13 +54,13 @@ int main(int argc, char * argv[])
 	}
 
 	system("PAUSE");
-	//HANDLE hFile = CreateFile(file_name.c_str(),		// name of the write
-	//							GENERIC_WRITE,          // open for writing
-	//							0,                      // do not share
-	//							NULL,                   // default security
-	//							CREATE_NEW,             // create new file only
-	//							FILE_ATTRIBUTE_NORMAL,  // normal file
-	//							NULL);                  // no attr. template
+	HANDLE hFile = CreateFile(file_name.c_str(),		// name of the write
+								GENERIC_WRITE,          // open for writing
+								0,                      // do not share
+								NULL,                   // default security
+								CREATE_NEW,             // create new file only
+								FILE_ATTRIBUTE_NORMAL,  // normal file
+								NULL);                  // no attr. template
 
 
 	HANDLE hFile = CreateFile(file_name.c_str(),								// file to open
@@ -78,6 +78,8 @@ int main(int argc, char * argv[])
 	}
 
 	CloseHandle(hFile);
+
+	system("PAUSE");
 
 	return 0;
 }

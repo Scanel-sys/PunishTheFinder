@@ -13,7 +13,7 @@ namespace fs = std::filesystem;
 class Injector
 {
 private:
-	
+
 	DWORD _process_id;
 	void* _load_lib_addr;
 
@@ -25,10 +25,15 @@ public:
 	void findLoadProcess();
 
 	void setProcessContext(std::wstring processName);
+	void setProcessContext(std::string processName);
+
 	void setProcessContext(DWORD dwProcessId);
 
-	bool inject(std::filesystem::path dllPath);
+	bool inject(fs::path dllPath);
 
-	bool makeInject(std::wstring processName, std::filesystem::path dllPath);
-	bool makeInject(DWORD dwProcessId, std::filesystem::path dllPath);
+	bool makeInject(std::wstring processName, fs::path dllPath);
+	bool makeInject(std::string processName, fs::path dllPath);
+	bool makeInject(DWORD dwProcessId, fs::path dllPath);
+	
+	static std::wstring s2ws(const std::string& str);
 };

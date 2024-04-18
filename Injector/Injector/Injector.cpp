@@ -1,6 +1,13 @@
 #include "Injector.h"
 
 
+std::wstring Injector::s2ws(const std::string& str)
+{
+	int size_needed = MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), NULL, 0);
+	std::wstring wstrTo(size_needed, 0);
+	MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), &wstrTo[0], size_needed);
+	return wstrTo;
+}
 
 DWORD Injector::getPid(std::wstring processName)
 {
@@ -23,7 +30,6 @@ DWORD Injector::getPid(std::wstring processName)
 		else
 			hResult = Process32Next(hSnapshot, &pe);
 	}
-
 	CloseHandle(hSnapshot);
 	return pid;
 }
@@ -49,12 +55,17 @@ void Injector::setProcessContext(std::wstring processName)
 	_process_id = getPid(processName);
 }
 
+void Injector::setProcessContext(std::string processName)
+{
+	setProcessContext(s2ws(processName));
+}
+
 void Injector::setProcessContext(DWORD dwProcessId)
 {
 	_process_id = dwProcessId;
 }
 
-bool Injector::inject(std::filesystem::path dllPath)
+bool Injector::inject(fs::path dllPath)
 {
 	HANDLE pHandler;
 	HANDLE remoteThread;
@@ -96,18 +107,22 @@ bool Injector::inject(std::filesystem::path dllPath)
 										remoteBuffer, 
 										0, NULL);
 	CloseHandle(pHandler);
-	
 	return true;
 }
 
-bool Injector::makeInject(std::wstring processName, std::filesystem::path dllPath)
+bool Injector::makeInject(std::wstring processName, fs::path dllPath)
 {
 	findLoadProcess();
 	setProcessContext(processName);
 	return inject(dllPath);
 }
 
-bool Injector::makeInject(DWORD dwProcessId, std::filesystem::path dllPath)
+bool Injector::makeInject(std::string processName, fs::path dllPath)
+{
+	return makeInject(s2ws(processName), dllPath);
+}
+
+bool Injector::makeInject(DWORD dwProcessId, fs::path dllPath)
 {
 	findLoadProcess();
 	setProcessContext(dwProcessId);
