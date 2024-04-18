@@ -11,9 +11,5 @@
 	#define VACCINE_API __declspec(dllimport)
 #endif
 
-
 DWORD WINAPI HackThread(HMODULE hModule);
-
-const std::string currentDateTime();
-
 #endif
