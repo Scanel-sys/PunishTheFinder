@@ -1,5 +1,3 @@
-"# PunishTheFinder" 
-
 # How to use
 ```bash
 Injector.exe {-pid <target_process_pid> | -name <target_process_name>} {-func <target_function_name> | -hide <target_file_name | -func <target_function_name> -hide <target_file_name>}
