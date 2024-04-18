@@ -18,7 +18,12 @@ ____
 ## Examples
 _____
 ```bash
-Injector.exe –pid 123 –func CreateFile
-Injector.exe –name explorer.exe –func CreateFile
-Injector.exe –name explorer.exe –hide “C:\hello.txt”
+Monitor.exe –pid 123 –func CreateFile
+Monitor.exe –name explorer.exe –func CreateFile
+Monitor.exe –name explorer.exe –hide “C:\hello.txt”
 ```
+
+## Also
+- Monitor includes Injector class from Injector project
+- Monitor looks for Vaccine.dll in Vaccine Debug folder and amongs its own source files
+- press "ESC" if you would like to leave from Monitor and detach the Vaccine
