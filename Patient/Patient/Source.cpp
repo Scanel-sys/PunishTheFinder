@@ -18,11 +18,8 @@ void DisplayError(LPTSTR lpszFunction);
 
 int main(int argc, char * argv[])
 {
-	//fs::path file_name = argv[1];
-	//fs::path file_name_to_find = argv[2];
-	fs::path file_name = "C:\\Users\\scanel\\Desktop\\src\\study\\3_course\\2_sem\\TRSPO\\2\\Patient\\Debug\\123.txt";
-	fs::path file_name_to_find = "C:\\Users\\scanel\\Desktop\\src\\study\\3_course\\2_sem\\TRSPO\\2\\Patient\\Debug\\123*.txt";
-
+	fs::path file_name = argv[1];
+	fs::path file_name_to_find = argv[2];
 
 	PVOID OldValue = NULL;
 	WIN32_FIND_DATA FindFileData;
@@ -31,7 +28,7 @@ int main(int argc, char * argv[])
 
 	std::cout << "\n";
 	int i = 0;
-	while (i++ < 2)
+	while (i++ < 4)
 	{
 		std::cout << "| log | Starting finding file...\n";
 
@@ -57,13 +54,13 @@ int main(int argc, char * argv[])
 	}
 
 	system("PAUSE");
-	//HANDLE hFile = CreateFile(file_name.c_str(),		// name of the write
-	//							GENERIC_WRITE,          // open for writing
-	//							0,                      // do not share
-	//							NULL,                   // default security
-	//							CREATE_NEW,             // create new file only
-	//							FILE_ATTRIBUTE_NORMAL,  // normal file
-	//							NULL);                  // no attr. template
+	HANDLE hFile = CreateFile(file_name.c_str(),		// name of the write
+								GENERIC_WRITE,          // open for writing
+								0,                      // do not share
+								NULL,                   // default security
+								CREATE_NEW,             // create new file only
+								FILE_ATTRIBUTE_NORMAL,  // normal file
+								NULL);                  // no attr. template
 
 
 	HANDLE hFile = CreateFile(file_name.c_str(),								// file to open
