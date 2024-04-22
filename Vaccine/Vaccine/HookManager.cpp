@@ -62,22 +62,24 @@ BOOL __stdcall hookManagerNS::HookFindNextFileA(HANDLE hFindFile, LPWIN32_FIND_D
 	std::string hookLog = HookManager::getHookLog("FindNextFileA", "hooked");
 	WriteFile(pipe, hookLog.c_str(), hookLog.size() + 1, NULL, NULL);
 
-
 	bool res = oFindNextFileA(hFindFile, lpFindFileData);
 	
-	if (strcmp(lpFindFileData->cFileName, filePathToHide.filename().string().c_str()) == 0)
+	if (res)
 	{
-		hookLog = HookManager::getHookLog("FindNextFileA", ": file being hidden");
-		WriteFile(pipe, hookLog.c_str(), hookLog.size() + 1, NULL, NULL);
-		
-		isWorking = lIsWorking;
-		if (res)
-			return oFindNextFileA(hFindFile, lpFindFileData);
-		else
-			return false;
+		if (strcmp(lpFindFileData->cFileName, filePathToHide.filename().string().c_str()) == 0)
+		{
+			hookLog = HookManager::getHookLog("FindNextFileA", ": file being hidden");
+			WriteFile(pipe, hookLog.c_str(), hookLog.size() + 1, NULL, NULL);
+
+			res = oFindNextFileA(hFindFile, lpFindFileData);
+		}
+	}
+	else
+	{
+		SetLastError(ERROR_NO_MORE_FILES);
 	}
 	isWorking = lIsWorking;
-	return true;
+	return res;
 }
 
 BOOL __stdcall hookManagerNS::HookFindNextFileW(HANDLE hFindFile, LPWIN32_FIND_DATAW lpFindFileData)
@@ -89,19 +91,23 @@ BOOL __stdcall hookManagerNS::HookFindNextFileW(HANDLE hFindFile, LPWIN32_FIND_D
 
 	bool res = hookManagerNS::oFindNextFileW(hFindFile, lpFindFileData);
 
-	if (wcscmp(lpFindFileData->cFileName, filePathToHide.filename().wstring().c_str()) == 0)
+	if (res)
 	{
-		hookLog = HookManager::getHookLog("FindNextFileW", ": file being hidden");
-		WriteFile(pipe, hookLog.c_str(), hookLog.size() + 1, NULL, NULL);
+		if (wcscmp(lpFindFileData->cFileName, filePathToHide.filename().wstring().c_str()) == 0)
+		{
+			hookLog = HookManager::getHookLog("FindNextFileW", ": file being hidden");
+			WriteFile(pipe, hookLog.c_str(), hookLog.size() + 1, NULL, NULL);
 
-		isWorking = lIsWorking;
-		if (res)
-			return hookManagerNS::oFindNextFileW(hFindFile, lpFindFileData);
-		else
-			return false;
+			res = hookManagerNS::oFindNextFileW(hFindFile, lpFindFileData);
+		}
 	}
+	else
+	{
+		SetLastError(ERROR_NO_MORE_FILES);
+	}
+
 	isWorking = lIsWorking;
-	return true;
+	return res;
 }
 
 
