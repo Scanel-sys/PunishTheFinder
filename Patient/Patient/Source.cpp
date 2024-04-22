@@ -19,7 +19,7 @@ void DisplayError(LPTSTR lpszFunction);
 int main(int argc, char * argv[])
 {
 	fs::path file_name = argv[1];
-	fs::path file_name_to_find = argv[2];
+	fs::path file_name_to_create = argv[2];
 
 	PVOID OldValue = NULL;
 	WIN32_FIND_DATA FindFileData;
@@ -32,7 +32,7 @@ int main(int argc, char * argv[])
 	{
 		std::cout << "| log | Starting finding file...\n";
 
-		hFind = FindFirstFile(file_name_to_find.wstring().data(), &FindFileData);
+		hFind = FindFirstFile(file_name.wstring().data(), &FindFileData);
 		do
 		{
 			if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
@@ -46,15 +46,15 @@ int main(int argc, char * argv[])
 				wprintf(TEXT("| log |   %s   %ld bytes\n"), FindFileData.cFileName, filesize.QuadPart);
 			}
 		
-			Sleep(1000);
+			Sleep(500);
 		} while (FindNextFile(hFind, &FindFileData) != 0);
 		if(GetLastError() == NO_MORE_FILES)
 			std::cout << "| log | No more files" << '\n';
 		FindClose(hFind);
 	}
 
-	system("PAUSE");
-	HANDLE hFile = CreateFile(file_name.c_str(),		// name of the write
+
+	HANDLE hFile = CreateFile(file_name_to_create.c_str(),		// name of the write
 								GENERIC_WRITE,          // open for writing
 								0,                      // do not share
 								NULL,                   // default security
@@ -62,24 +62,25 @@ int main(int argc, char * argv[])
 								FILE_ATTRIBUTE_NORMAL,  // normal file
 								NULL);                  // no attr. template
 
-
-	HANDLE hFile = CreateFile(file_name.c_str(),								// file to open
-		GENERIC_READ,									// open for reading
-		FILE_SHARE_READ,								// share for reading
-		NULL,											// default security
-		OPEN_EXISTING,									// existing file only
-		FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED,	// normal file
-		NULL);											// no attr. template
-
 	if (hFile == INVALID_HANDLE_VALUE)
 	{
-		std::cout << "CreateFile\n";
-		std::cout << "Terminal failure: file doesnt exist " << file_name.string().c_str() << '\n';
+		std::cout << "| log |   CreateFile failure: creating new file failured" << file_name_to_create << '\n';
+	}
+	CloseHandle(hFile);
+	HANDLE hFile2 = CreateFile(file_name_to_create.c_str(),								// file to open
+								GENERIC_READ,									// open for reading
+								FILE_SHARE_READ,								// share for reading
+								NULL,											// default security
+								OPEN_EXISTING,									// existing file only
+								FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED,	// normal file
+								NULL);											// no attr. template
+
+	if (hFile2 == INVALID_HANDLE_VALUE)
+	{
+		std::cout << "| log |  CreateFile failure: file doesnt exist " << file_name_to_create << '\n';
 	}
 
-	CloseHandle(hFile);
-
-	system("PAUSE");
+	CloseHandle(hFile2);
 
 	return 0;
 }
