@@ -4,6 +4,8 @@
 
 DWORD WINAPI HackThread(HMODULE hModule)
 {
+/*	Doesnt work with cmd32 / notepad / etc
+
 	bool ifAllocatedConsole = AllocConsole();
 	FILE* fDummy;
 	freopen_s(&fDummy, "CONOUT$", "w", stdout);
@@ -13,7 +15,7 @@ DWORD WINAPI HackThread(HMODULE hModule)
 	std::clog.clear();
 	std::cerr.clear();
 	std::cin.clear();
-
+*/
 	HookManager hook_manager;
 
 	std::cout << hook_manager.getHackThreadName() << "Hello chumba from hack thread!\n";
@@ -21,8 +23,8 @@ DWORD WINAPI HackThread(HMODULE hModule)
 	while (hook_manager.stillWork()){}
 
 	hook_manager.unhookAll();
-	fclose(fDummy);
-	if(ifAllocatedConsole) FreeConsole();
+//	fclose(fDummy);
+//	if(ifAllocatedConsole) FreeConsole();
 	FreeLibraryAndExitThread(hModule, 0);
 	return 0;
 }
